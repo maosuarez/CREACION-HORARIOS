@@ -44,4 +44,4 @@ TailwindCSS es la elección perfecta para un proyecto con tiempos ajustados. Su 
 
 ---
 
-Contribuido por Isa Dias, Nico Clavijo, Gaby Bejarano, y Mao Suárez.
+Contribuido por Isa Diaz, Nico Clavijo, Gaby Bejarano, y Mao Suárez.
