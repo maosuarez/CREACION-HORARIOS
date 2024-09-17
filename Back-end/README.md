@@ -31,7 +31,7 @@ Este README describe la parte de **backend** del proyecto de creación de horari
 
 ### **Horario Management (Spring Boot)**
 
--**Vacio**
+-La aplicacion ya se puede desplegar
 
 ### **API Externa**
 
