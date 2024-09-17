@@ -26,4 +26,8 @@ public class Controlador {
     public String obtenerSaludo(){
         return "Hola, bienvenido a la API de horarios";
     }
+    @GetMapping("/saludo/adios")
+    public String obtenerSaludoAdios(){
+        return "Adios, gracias por usar la API de horarios";
+    }
 }
