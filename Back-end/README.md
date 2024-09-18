@@ -31,8 +31,7 @@ Este README describe la parte de **backend** del proyecto de creación de horari
 
 ### **Horario Management (Spring Boot)**
 
-#### End-Points
-##### 1. Peticion POST
+### 1. Peticion POST
 ```bash
    /horarios
 ```
@@ -58,7 +57,7 @@ La lista de materias es de la forma
       {//**Se pueden poner cuantas materias se quiera}
    ]
    ```
-#### Respuesta 1
+### Respuesta 1
 ```bash
    {
       "origenTexto":{
