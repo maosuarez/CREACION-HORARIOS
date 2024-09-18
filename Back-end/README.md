@@ -31,7 +31,72 @@ Este README describe la parte de **backend** del proyecto de creación de horari
 
 ### **Horario Management (Spring Boot)**
 
--La aplicacion ya se puede desplegar
+### 1. Peticion POST
+```bash
+   /horarios
+```
+Se debe pasar un body de la forma:
+```bash
+   {"horas": //Horas libres,
+      "lista": //Lista de materias elegidas}
+ ```
+Las horas libres son de la forma
+```bash
+   {
+      "lunes":[//Horas en formato 24horas "7:00" o "15:00"],
+      "martes":[//lo mismo],
+      ...
+      "sabados":[//Este seria el ultimo]
+   }
+```
+La lista de materias es de la forma
+```bash
+   [
+      {"materia":"//AppWeb","profesores":[//nombres en str],"codigos":[//puede ser una lista vacia]},
+      ...
+      {//**Se pueden poner cuantas materias se quiera}
+   ]
+   ```
+### Respuesta 1
+```bash
+   {
+      "origenTexto":{
+         "listMates":[],
+         "horariosTexto":[]
+      },
+      "mejoresTextos":{//Todos son iguales},
+      "interTextos":{},
+      "malosTextos":{},
+   }
+```
+Para lista mates, es una lista de listas con objetos con los siguientes datos
+```bash
+   {
+      "materia": //nombre,
+      "profesor": //Nombre profesor,
+      "codigo": //codigo de clase
+   }
+```
+Para horarios texto, es un array ordenado con la forma de la semana 12filas x 6columns:
+```bash
+   Se van pintando por filas de la semana
+```
+### 2. GET
+### 2.1 
+```bash
+   /opciones/codigo?name=appweb
+```
+Devuelve una lista con los codigos relacionados a la materia
+### 2.2
+```bash
+   /opciones/profesor?name=circuitos
+```
+Devuelve una lista con los profesores relacionados a la materia
+### 2.3
+```bash
+   /opciones/codigo?name=app  //(inicio de la materia)
+```
+Devuelve materias que estan relacionados con el inicio
 
 ### **API Externa**
 
