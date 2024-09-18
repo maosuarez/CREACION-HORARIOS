@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,12 +19,14 @@ import com.example.apihorarios.Clases.Materias;
 import com.example.apihorarios.Clases.ObjetoAuxiliar;
 import com.example.apihorarios.Clases.Optimizar;
 import com.example.apihorarios.Clases.Preferencias;
+import com.example.apihorarios.Clases.ResponseArray;
 import com.example.apihorarios.Clases.Traductor;
 import com.example.apihorarios.MySQL.BaseDatos;
 
 @RestController
 public class Controlador {
     
+    @CrossOrigin(origins="*")
     @PostMapping("/horarios")
     public ResponseEntity<Optimizar> obtenerHorarios(@RequestBody BodyObject bodyObject) {
         try {
@@ -90,13 +93,14 @@ public class Controlador {
     }
 
 
+    @CrossOrigin(origins="*")
     @GetMapping("/opciones/codigo")
-public ResponseEntity<ArrayList<String>> obtenerCodigos(@RequestParam(value = "name", defaultValue = "World") String name) {
+public ResponseEntity<ResponseArray> obtenerCodigos(@RequestParam(value = "name", defaultValue = "World") String name) {
     try {
         // Validar que el nombre no esté vacío
         if (name == null || name.trim().isEmpty()) {
             System.out.println("Error: El parámetro 'name' no puede estar vacío");
-            return ResponseEntity.badRequest().body(new ArrayList<>());
+            return ResponseEntity.badRequest().body(new ResponseArray());
         }
 
         BaseDatos basedatos = conectarBaseDatos();
@@ -106,24 +110,25 @@ public ResponseEntity<ArrayList<String>> obtenerCodigos(@RequestParam(value = "n
             System.out.println("No se encontraron materias con el nombre proporcionado");
         }
 
-        return ResponseEntity.ok(listaMaterias);
+        return ResponseEntity.ok(new ResponseArray(listaMaterias));
 
     } catch (SQLException e) {
         System.out.println("Error: Problema con la base de datos - " + e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseArray());
     } catch (Exception e) {
         System.out.println("Error inesperado: " + e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseArray());
     }
 }
 
+@CrossOrigin(origins="*")
 @GetMapping("/opciones/profesor")
-public ResponseEntity<ArrayList<String>> obtenerProfesores(@RequestParam(value = "name", defaultValue = "World") String name) {
+public ResponseEntity<ResponseArray> obtenerProfesores(@RequestParam(value = "name", defaultValue = "World") String name) {
     try {
         // Validar que el nombre no esté vacío
         if (name == null || name.trim().isEmpty()) {
             System.out.println("Error: El parámetro 'name' no puede estar vacío");
-            return ResponseEntity.badRequest().body(new ArrayList<>());
+            return ResponseEntity.badRequest().body(new ResponseArray());
         }
 
         BaseDatos basedatos = conectarBaseDatos();
@@ -133,24 +138,25 @@ public ResponseEntity<ArrayList<String>> obtenerProfesores(@RequestParam(value =
             System.out.println("No se encontraron profesores con el nombre proporcionado");
         }
 
-        return ResponseEntity.ok(listaMaterias);
+        return ResponseEntity.ok(new ResponseArray(listaMaterias));
 
     } catch (SQLException e) {
         System.out.println("Error: Problema con la base de datos - " + e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseArray());
     } catch (Exception e) {
         System.out.println("Error inesperado: " + e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseArray());
     }
 }
 
+@CrossOrigin(origins="*")
 @GetMapping("/opciones/materia")
-public ResponseEntity<ArrayList<String>> obtenerMaterias(@RequestParam(value = "name", defaultValue = "World") String name){
+public ResponseEntity<ResponseArray> obtenerMaterias(@RequestParam(value = "name", defaultValue = "World") String name){
     try {
         // Validar que el nombre no esté vacío
         if (name == null || name.trim().isEmpty()) {
             System.out.println("Error: El parámetro 'name' no puede estar vacío");
-            return ResponseEntity.badRequest().body(new ArrayList<>());
+            return ResponseEntity.badRequest().body(new ResponseArray());
         }
 
         BaseDatos basedatos = conectarBaseDatos();
@@ -160,14 +166,14 @@ public ResponseEntity<ArrayList<String>> obtenerMaterias(@RequestParam(value = "
             System.out.println("No se encontraron materias con el nombre proporcionado");
         }
 
-        return ResponseEntity.ok(listaMaterias);
+        return ResponseEntity.ok( new ResponseArray(listaMaterias));
 
     } catch (SQLException e) {
         System.out.println("Error: Problema con la base de datos - " + e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseArray());
     } catch (Exception e) {
         System.out.println("Error inesperado: " + e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseArray());
     }
 }
 
