@@ -43,7 +43,8 @@ Se debe pasar un body de la forma:
  ```
 Las horas libres son de la forma
 ```bash
-   {"lunes":[//Horas en formato 24horas "7:00" o "15:00"],
+   {
+      "lunes":[//Horas en formato 24horas "7:00" o "15:00"],
       "martes":[//lo mismo],
       ...
       "sabados":[//Este seria el ultimo]
@@ -51,7 +52,8 @@ Las horas libres son de la forma
 ```
 La lista de materias es de la forma
 ```bash
-   [{"materia":"//AppWeb","profesores":[//nombres en str],"codigos":[//puede ser una lista vacia]},
+   [
+      {"materia":"//AppWeb","profesores":[//nombres en str],"codigos":[//puede ser una lista vacia]},
       ...
       {//**Se pueden poner cuantas materias se quiera}
    ]
