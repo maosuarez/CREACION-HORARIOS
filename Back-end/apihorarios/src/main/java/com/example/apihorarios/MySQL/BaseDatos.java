@@ -15,11 +15,12 @@ import java.sql.SQLException;
 
 public class BaseDatos {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/materias-horarios";
+    private String URL ;
     private String username;
     private String password;
 
-    public BaseDatos(String username_actu, String password_actu) {
+    public BaseDatos(String username_actu, String password_actu,String url) {
+        this.URL = url;
         this.username = username_actu;
         this.password = password_actu;
     }

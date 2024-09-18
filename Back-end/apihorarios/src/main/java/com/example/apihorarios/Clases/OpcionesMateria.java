@@ -1,6 +1,10 @@
 package com.example.apihorarios.Clases;
 
+//Es un Objeto auxiliar dentro de los objetos materias, que almacenan informacion adicional
 public class OpcionesMateria {
+
+    //Atributos
+    //------------------------------
     private String Codigo;
 
     private String Profesor;
@@ -8,13 +12,16 @@ public class OpcionesMateria {
     private HorasSemana Horas;
 
     private String materia;
+    //------------------------------
 
+    //Constructor
     public OpcionesMateria(String codigo, String profesor,HorasSemana horas) {
         Codigo = codigo;
         Profesor = profesor;
         Horas = horas;
     }
 
+    //Setter y Getter
     public String getCodigo() {
         return Codigo;
     }

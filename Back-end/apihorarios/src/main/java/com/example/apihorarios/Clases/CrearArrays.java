@@ -3,7 +3,11 @@ package com.example.apihorarios.Clases;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+//Este Objeto esta diseñado para sortear las materias
 public class CrearArrays {
+
+    //Atributos
+    //-----------------------------------------------
     private ArrayList<Materias> listaPosibles;
 
     private ArrayList<Preferencias> listaPreferencias;
@@ -13,10 +17,15 @@ public class CrearArrays {
     private int[][] ArrayActual = new int[12][6];
 
     private int contador;
-    public Boolean listo;
-    public Boolean listo1;
-    public  Boolean notFound;
 
+    public Boolean listo;
+
+    public Boolean listo1;
+
+    public  Boolean notFound;
+    //-------------------------------------------------
+
+    //Constructor
     public CrearArrays(){
     }
 
@@ -26,6 +35,7 @@ public class CrearArrays {
         horasLibres = horas;
     }
 
+    //Metodo generar horario
     public ObjetoAuxiliar Generar(){
 
         //Se crean dos listas vacias
@@ -51,37 +61,7 @@ public class CrearArrays {
         //En caso de error
         if(listo1){
             return obj;
-        }
-
-        /* //Definir variables para random
-        int x;
-        ArrayList<Integer> indicesRandom = new ArrayList<>();
-        ObjetoAuxiliar objetoRandom;
-        ArrayList<int[][]> randomHorarios = new ArrayList<>();
-        ArrayList<ArrayList<OpcionesMateria>> randomCodigos = new ArrayList<>();*/
-
-        
-
-        //Abrir el ciclo de 3
-
-        /*
-        for(int i = 0; i<3; i++){
-            x = (int)( Math.random() * posiblesHorarios.size() );
-            System.out.println(posiblesHorarios.size());
-            if(!indicesRandom.contains(x)){
-                indicesRandom.add(x);
-                randomCodigos.add(listMates.get(x));
-                randomHorarios.add(posiblesHorarios.get(x));
-            }else{
-                i--;
-            }
-
-        }
-
-         */
-        //objetoRandom = new ObjetoAuxiliar(randomCodigos,randomHorarios);
-
-        
+        } 
 
         return obj;
     }
@@ -246,6 +226,7 @@ public class CrearArrays {
         return new ObjetoAuxiliar(actuMates, Actu);
     }
 
+    //Crear una matriz de 0
     private int[][] matrizCero(){
         int[][] matriz = new int[12][6];
         for(int i=0; i < 12; i++){
@@ -256,6 +237,7 @@ public class CrearArrays {
         return matriz;
     }
 
+    //Verificar que no este la clase
     private Boolean ClaseNecesaria(String materia, OpcionesMateria opc){
         for (Preferencias prefe : listaPreferencias) {
             if (prefe.getMateria().equalsIgnoreCase(materia)) {
@@ -271,6 +253,7 @@ public class CrearArrays {
         return false;
     }
 
+    //Se verifica
     private Boolean ClaseEvaluar(String materia){
         for (Preferencias prefe : listaPreferencias) {
             if (prefe.getMateria().equalsIgnoreCase(materia)) {
@@ -337,6 +320,7 @@ public class CrearArrays {
         return true;
     }
 
+    //Evitar los problemas de direccion de memoria
     private int[][] ajustarMatriz(int[][] matriznueva,int[][] matrizvieja){
         for(int i = 0; i<12; i++) {
             for (int j = 0; j < 6; j++) {

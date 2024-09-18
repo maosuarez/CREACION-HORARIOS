@@ -1,14 +1,19 @@
 package com.example.apihorarios.Clases;
 import java.util.ArrayList;
 
+//Objeto para almacenar la informacion de cada materia
 public class Materias {
 
+    //Atributos
+    //-------------------------------------
     private String nombreMateria;
 
     private Integer NoMate;
 
     private ArrayList<OpcionesMateria> ListaOpciones = new ArrayList<>();
+    //-------------------------------------
 
+    //Constructor
     public Materias() {}
 
     public Materias(String nombre){
@@ -27,6 +32,7 @@ public class Materias {
         ListaOpciones.add(opc);
     }
 
+    //Getters
     public String getNombreMateria() {
         return nombreMateria;
     }

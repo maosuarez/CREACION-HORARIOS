@@ -2,17 +2,25 @@ package com.example.apihorarios.Clases;
 import java.util.ArrayList;
 import java.util.Collections;
 
+//Objeto Diseñado para mejorar la calidad de los horarios
 public class Optimizar {
+
+    //Atributos
+    //------------------------------------------------------
     private ArrayList<int [][]> mejores;
+    private ArrayList<String [][]> mejoresTexto;
     private ArrayList<ArrayList<OpcionesMateria>> mejoresCodi;
 
     private ArrayList<int[][]> inter;
+    private ArrayList<String[][]> interTexto;
     private ArrayList<ArrayList<OpcionesMateria>> interCodi;
 
     private ArrayList<int[][]> malos;
+    private ArrayList<String[][]> malosTexto;
     private ArrayList<ArrayList<OpcionesMateria>> malosCodi;
 
     private ArrayList<int[][]> origen;
+    private ArrayList<String[][]> origenTexto;
     private ArrayList<ArrayList<OpcionesMateria>> origenCodi;
 
     private ArrayList<ArrayList<Integer>> listaHuecos;
@@ -20,6 +28,11 @@ public class Optimizar {
 
     private ArrayList<Integer> adecuados;
     private ArrayList<Integer> faciles;
+    private Traductor traductor;
+    //---------------------------------------------------------
+
+    //Constructor
+    public Optimizar(){}
 
     public Optimizar(ObjetoAuxiliar obj){
         origen = obj.getPosiblesHorarios();
@@ -30,6 +43,21 @@ public class Optimizar {
         faciles = new ArrayList<>();
     }
 
+    public Optimizar(ObjetoAuxiliar obj,ObjetoAuxiliar obj1,ObjetoAuxiliar obj2,ObjetoAuxiliar obj3){
+        origenTexto = obj.getHorariosTexto();
+        origenCodi = obj.getListMates();
+
+        mejoresTexto = obj1.getHorariosTexto();
+        mejoresCodi = obj1.getListMates();
+
+        interTexto = obj2.getHorariosTexto();
+        interCodi = obj2.getListMates();
+
+        malosTexto = obj3.getHorariosTexto();
+        malosCodi = obj3.getListMates();
+    }
+
+    //metodos para mejorar calidad de horarios
     public void Optimos(){
 
         mejores = new ArrayList<>();
@@ -65,20 +93,22 @@ public class Optimizar {
         //System.out.println("PesadoE "+pesadoE);
         //System.out.println("PesadoM "+pesadoM);
 
+        origenTexto = traductor.transformarTexto(origen);
+
         for( int i = 0 ; i < origen.size() ; i++ ){
-
-            System.out.println("promedio " + promedio(listaHuecos.get(i)) + " otro promedio " + promedio(listaBloques.get(i)));
-
 
             if(promedio(listaHuecos.get(i)) < valorE && promedio(listaBloques.get(i)) < pesadoE){
                 mejores.add(origen.get(i));
                 mejoresCodi.add(origenCodi.get(i));
+                mejoresTexto.add(origenTexto.get(i));
             } else if (promedio(listaHuecos.get(i)) < valorE || promedio(listaBloques.get(i)) < pesadoE) {
                 inter.add(origen.get(i));
                 interCodi.add(origenCodi.get(i));
+                interTexto.add(origenTexto.get(i));
             } else if (promedio(listaHuecos.get(i)) < valorM || promedio(listaBloques.get(i)) < pesadoM) {
                 malos.add(origen.get(i));
                 malosCodi.add(origenCodi.get(i));
+                malosTexto.add(origenTexto.get(i));
             }
         }
 
@@ -178,15 +208,22 @@ public class Optimizar {
         return new ObjetoAuxiliar(huecos, bloques, true);
     }
 
-    public ObjetoAuxiliar getMejores() {
-        return new ObjetoAuxiliar(mejoresCodi, mejores);
+    //Setter
+    public void setTraductor(Traductor traduc){
+        traductor = traduc;
     }
 
-    public ObjetoAuxiliar getInter() {
-        return new ObjetoAuxiliar(interCodi, inter);
+    //Getters
+    public ObjetoAuxiliar getMejoresTextos(){
+        return new ObjetoAuxiliar(mejoresTexto,mejoresCodi,"true");
     }
-
-    public ObjetoAuxiliar getMalos() {
-        return new ObjetoAuxiliar(malosCodi, malos);
+    public ObjetoAuxiliar getInterTextos(){
+        return new ObjetoAuxiliar(interTexto,interCodi,"true");
+    }
+    public ObjetoAuxiliar getMalosTextos(){
+        return new ObjetoAuxiliar(malosTexto,malosCodi,"true");
+    }
+    public ObjetoAuxiliar getOrigenTexto(){
+        return new ObjetoAuxiliar(origenTexto,origenCodi,"true");
     }
 }

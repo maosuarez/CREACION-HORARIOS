@@ -2,14 +2,20 @@ package com.example.apihorarios.Clases;
 
 import java.util.ArrayList;
 
+//Objeto que se cero para ordenar las horas de la semana
 public class HorasSemana {
+
+    //Atributos
+    //----------------------------------
     private ArrayList<String> Lunes;
     private ArrayList<String> Martes;
     private ArrayList<String> Miercoles;
     private ArrayList<String> Jueves;
     private ArrayList<String> Viernes;
     private ArrayList<String> Sabados;
+    //----------------------------------
 
+    //Constructor
     public HorasSemana() {
         Lunes = new ArrayList<>();
         Martes = new ArrayList<>();
@@ -19,6 +25,7 @@ public class HorasSemana {
         Sabados = new ArrayList<>();
     }
 
+    //metodo ajustar el valor de cada lista de variables
     public void setHorasSemana(String dia, ArrayList<String> ListaHoras){
         switch (dia){
             case "lunes":
@@ -42,6 +49,7 @@ public class HorasSemana {
         }
     }
 
+    //Return la lista del dia que se pida
     public ArrayList<String> getDiaHoras(int dia){
         return switch (dia) {
             case 1 -> Lunes;
@@ -54,6 +62,7 @@ public class HorasSemana {
         };
     }
 
+    //Pasar de una hora a un indice
     private int traductor(String hora){
         return switch(hora){
             case "7:00" -> 0;
@@ -72,16 +81,17 @@ public class HorasSemana {
         };
     }
 
-     public void revisarHorario(){
-         for(int i = 1 ; i < 7; i++){
-             ArrayList<String> dia = this.getDiaHoras(i);
-             if(!dia.isEmpty()){
-                 for(String hora : dia){
-                     System.out.println(i+"--"+hora);
-                 }
-             }
-         }
-     }
+    //Ver como se comparte el horario
+    public void revisarHorario(){
+        for(int i = 1 ; i < 7; i++){
+            ArrayList<String> dia = this.getDiaHoras(i);
+            if(!dia.isEmpty()){
+                for(String hora : dia){
+                    System.out.println(i+"--"+hora);
+                }
+            }
+        }
+    }
 
     public ArrayList<String> DevolverIndices(){
         ArrayList<String> indices = new ArrayList<>();
@@ -98,6 +108,7 @@ public class HorasSemana {
         return indices;
     }
 
+    //Getters
     public Boolean verDispo(String hora, int dia){
         return getDiaHoras(dia).contains(hora);
     }
