@@ -1,11 +1,14 @@
 package com.example.apihorarios;
 
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.apihorarios.Clases.BodyObject;
@@ -22,53 +25,156 @@ import com.example.apihorarios.MySQL.BaseDatos;
 public class Controlador {
     
     @PostMapping("/horarios")
-    public Optimizar obtenerHorarios(@RequestBody BodyObject bodyObject){
-        try{
+    public ResponseEntity<Optimizar> obtenerHorarios(@RequestBody BodyObject bodyObject) {
+        try {
             System.out.println("Obteniendo horarios");
-        
-            BaseDatos basedatos = new BaseDatos( "root", "Maotenis2005!","jdbc:mysql://localhost:3306/materias-horarios");
-            ArrayList<Materias> listaMaterias = basedatos.getDatos();
+
+            // Validar que el bodyObject no sea nulo
+            if (bodyObject == null || bodyObject.getLista() == null || bodyObject.getLibres() == null) {
+                System.out.println("Error: Cuerpo de la solicitud o datos inválidos");
+                return ResponseEntity.badRequest().body(new Optimizar());
+            }
+
+            BaseDatos basedatos = null;
+            try {
+                basedatos = conectarBaseDatos();
+            } catch (Error e) {
+                System.out.println("Error: No se pudo conectar a la base de datos");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Optimizar());
+            }
+
+            ArrayList<Materias> listaMaterias;
+            try {
+                listaMaterias = basedatos.getDatos();
+            } catch (Error e) {
+                System.out.println("Error: No se pudieron obtener los datos de la base de datos");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Optimizar());
+            }
 
             ArrayList<Preferencias> listaPreferencias = bodyObject.getLista();
-
             HorasSemana horasLibres = bodyObject.getLibres();
 
-            CrearArrays creador = new CrearArrays(listaMaterias,listaPreferencias,horasLibres);
+            // Validar que las listas no estén vacías
+            if (listaPreferencias.isEmpty() || listaMaterias.isEmpty()) {
+                System.out.println("Error: La lista de materias o preferencias está vacía");
+                return ResponseEntity.badRequest().body(new Optimizar());
+            }
+
+            CrearArrays creador = new CrearArrays(listaMaterias, listaPreferencias, horasLibres);
             ObjetoAuxiliar obj = creador.Generar();
 
-            if(obj == null){
-                System.out.println("No pudimos Generar ningun horario con las anteriores restricciones reviselas e inetente de nuevo");
-            }else{
-                if(!obj.getPosiblesHorarios().isEmpty()) {
-
-                    Traductor traduc = new Traductor(listaMaterias);
-
-                    //Optimizar
-                    Optimizar opti = new Optimizar(obj);
-                    opti.setTraductor(traduc);
-
-                    opti.Optimos();
-
-                    return opti;
-                }
+            if (obj == null || obj.getPosiblesHorarios().isEmpty()) {
+                System.out.println("No pudimos generar ningún horario con las restricciones dadas. Revísalas e intenta de nuevo.");
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new Optimizar());
             }
-            return new Optimizar();
 
-        }catch(Error e){
-            return new Optimizar();
+            Traductor traduc = new Traductor(listaMaterias);
+            
+            // Optimización
+            Optimizar opti = new Optimizar(obj);
+            opti.setTraductor(traduc);
+
+            try {
+                opti.Optimos();
+            } catch (Exception e) {
+                System.out.println("Error: Ocurrió un problema durante la optimización");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Optimizar());
+            }
+
+            return ResponseEntity.ok(opti);
+
+        } catch (Exception e) {
+            System.out.println("Error no controlado: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Optimizar());
         }
     }
 
-    @GetMapping("/saludo")
-    public String obtenerSaludo(){
-        return "Hola, bienvenido a la API de horarios";
+
+    @GetMapping("/opciones/codigo")
+public ResponseEntity<ArrayList<String>> obtenerCodigos(@RequestParam(value = "name", defaultValue = "World") String name) {
+    try {
+        // Validar que el nombre no esté vacío
+        if (name == null || name.trim().isEmpty()) {
+            System.out.println("Error: El parámetro 'name' no puede estar vacío");
+            return ResponseEntity.badRequest().body(new ArrayList<>());
+        }
+
+        BaseDatos basedatos = conectarBaseDatos();
+        ArrayList<String> listaMaterias = basedatos.getOpciones("codigo", name);
+
+        if (listaMaterias.isEmpty()) {
+            System.out.println("No se encontraron materias con el nombre proporcionado");
+        }
+
+        return ResponseEntity.ok(listaMaterias);
+
+    } catch (SQLException e) {
+        System.out.println("Error: Problema con la base de datos - " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+    } catch (Exception e) {
+        System.out.println("Error inesperado: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
     }
-    @GetMapping("/saludo/adios")
-    public String obtenerSaludoAdios(){
-        return "Adios, gracias por usar la API de horarios";
+}
+
+@GetMapping("/opciones/profesor")
+public ResponseEntity<ArrayList<String>> obtenerProfesores(@RequestParam(value = "name", defaultValue = "World") String name) {
+    try {
+        // Validar que el nombre no esté vacío
+        if (name == null || name.trim().isEmpty()) {
+            System.out.println("Error: El parámetro 'name' no puede estar vacío");
+            return ResponseEntity.badRequest().body(new ArrayList<>());
+        }
+
+        BaseDatos basedatos = conectarBaseDatos();
+        ArrayList<String> listaMaterias = basedatos.getOpciones("profesor", name);
+
+        if (listaMaterias.isEmpty()) {
+            System.out.println("No se encontraron profesores con el nombre proporcionado");
+        }
+
+        return ResponseEntity.ok(listaMaterias);
+
+    } catch (SQLException e) {
+        System.out.println("Error: Problema con la base de datos - " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+    } catch (Exception e) {
+        System.out.println("Error inesperado: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
     }
-    @PostMapping("/json")
-    public ArrayList<Preferencias> pruba(@RequestBody BodyObject objPrueba){
-        return objPrueba.getLista();
+}
+
+@GetMapping("/opciones/materia")
+public ResponseEntity<ArrayList<String>> obtenerMaterias(@RequestParam(value = "name", defaultValue = "World") String name){
+    try {
+        // Validar que el nombre no esté vacío
+        if (name == null || name.trim().isEmpty()) {
+            System.out.println("Error: El parámetro 'name' no puede estar vacío");
+            return ResponseEntity.badRequest().body(new ArrayList<>());
+        }
+
+        BaseDatos basedatos = conectarBaseDatos();
+        ArrayList<String> listaMaterias = basedatos.sugerencias(name);
+
+        if (listaMaterias.isEmpty()) {
+            System.out.println("No se encontraron materias con el nombre proporcionado");
+        }
+
+        return ResponseEntity.ok(listaMaterias);
+
+    } catch (SQLException e) {
+        System.out.println("Error: Problema con la base de datos - " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+    } catch (Exception e) {
+        System.out.println("Error inesperado: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
     }
+}
+
+// Método auxiliar para la conexión a la base de datos
+private BaseDatos conectarBaseDatos() throws SQLException {
+    return new BaseDatos("root", "Maotenis2005!", "jdbc:mysql://localhost:3306/materias-horarios");
+}
+
+    
 }

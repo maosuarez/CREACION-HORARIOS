@@ -25,6 +25,42 @@ public class BaseDatos {
         this.password = password_actu;
     }
 
+    public ArrayList<String> getOpciones(String columna, String materia){
+        ArrayList<String> opciones = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(URL, username, password);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM materias WHERE LOWER(materia) = LOWER('"+materia+"')")) 
+        {
+            while (resultSet.next()) {
+                String text = resultSet.getString(columna);
+                if(!opciones.contains(text)){
+                    opciones.add(text);
+                } 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return opciones;
+    }
+
+    public ArrayList<String> sugerencias(String comienzo){
+        ArrayList<String> sugerencias = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(URL, username, password);
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM materias WHERE LOWER(materia) LIKE LOWER('"+comienzo+"%')"))
+        {
+            while (resultSet.next()) {
+                String text = resultSet.getString("materia");
+                if(!sugerencias.contains(text)){
+                    sugerencias.add(text);
+                } 
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sugerencias;
+    }
+
     public ArrayList<Materias> getDatos() {
         ArrayList<Materias> listaMaterias = new ArrayList<>();
         try (
