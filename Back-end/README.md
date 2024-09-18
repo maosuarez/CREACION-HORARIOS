@@ -81,7 +81,22 @@ Para horarios texto, es un array ordenado con la forma de la semana 12filas x 6c
 ```bash
    Se van pintando por filas de la semana
 ```
-
+### 2. GET
+### 2.1 
+```bash
+   /opciones/codigo?name=appweb
+```
+Devuelve una lista con los codigos relacionados a la materia
+### 2.2
+```bash
+   /opciones/profesor?name=circuitos
+```
+Devuelve una lista con los profesores relacionados a la materia
+### 2.3
+```bash
+   /opciones/codigo?name=app  //(inicio de la materia)
+```
+Devuelve materias que estan relacionados con el inicio
 
 ### **API Externa**
 
