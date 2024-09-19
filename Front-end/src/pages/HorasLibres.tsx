@@ -1,12 +1,12 @@
 import BtnGroup from "../components/BtnGroup";
-import Table from "../components/Table";
+import Semanario from "../components/Semanario";
 import Title from "../components/Title";
 
 function Principal() {
   return (
     <div>
       <Title />
-      <Table />
+      <Semanario titulo={"Horas Libres en la semana"} />
       <BtnGroup />
     </div>
   );
